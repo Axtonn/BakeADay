@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-dotenv
+sqlalchemy
+asyncpg          # PostgreSQL driver (remove if using SQLite)
+passlib[bcrypt]
+python-multipart
+itsdangerous     # For signed cookie sessions
