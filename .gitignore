@@ -1,0 +1,92 @@
+# --- OS and Editor Junk ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Python (FastAPI) ---
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.log
+.env
+.env.*
+.envrc
+.mypy_cache/
+.pytest_cache/
+.cache/
+venv/
+.venv/
+Pipfile.lock
+db.sqlite3
+instance/
+alembic.ini
+alembic/
+*.db
+*.sqlite3
+
+# --- Node.js / Next.js / React ---
+node_modules/
+.next/
+out/
+dist/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Frontend Environment Files ---
+.env.local
+.env.development
+.env.test
+.env.production
+
+# --- Test and Coverage ---
+coverage/
+htmlcov/
+*.cover
+*.coverage
+.cache/
+test-results/
+junit.xml
+
+# --- Static and User Uploads (if not versioned) ---
+static/images/products/*
+!static/images/products/.gitkeep
+public/static/*
+!public/static/.gitkeep
+
+# --- Docker ---
+*.pid
+*.pid.lock
+
+# --- Misc ---
+*.bak
+*.tmp
+*.temp
+
+# --- Optional: Remove secrets, configs, credentials ---
+secrets.*
+config.*
+credentials.*
+
+# --- Optional: Remove migration and backup files ---
+*.bak
+*.orig
+*.old
+*.save
+
+# --- If you use SASS or LESS ---
+*.sass-cache
+*.scss-cache
+
+# --- Ignore coverage reports ---
+.coverage
+coverage.xml
+
+# --- VS Code settings (if you want to keep team settings out) ---
+.vscode/
