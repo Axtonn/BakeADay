@@ -5,7 +5,6 @@ WORKDIR /app
 ENV PYTHONPATH=/app
 
 RUN pip install --upgrade pip
-RUN npm install @vercel/analytics
 
 
 # Install dependencies
