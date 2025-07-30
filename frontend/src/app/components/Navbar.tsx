@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
+import Link from "next/dist/client/link";
 
 type CartItem = {
   id: number;
@@ -28,22 +29,22 @@ export default function Navbar() {
 
   return (
     <nav className="flex justify-between items-center px-6 py-3 bg-pink-100 shadow">
-      <a href="/" className="text-3xl font-extrabold text-pink-700 flex items-center gap-2">
+      <Link href="/" className="text-3xl font-extrabold text-pink-700 flex items-center gap-2">
         <span role="img" aria-label="cupcake">🧁</span> A Bake A Day
-      </a>
+      </Link>
       <div className="flex items-center gap-6">
-        <a href="/products" className="font-semibold text-pink-700 hover:underline">Menu</a>
-        <a href="/order" className="font-semibold text-pink-700 hover:underline">Order</a>
-        <a href="/cart" className="relative font-semibold text-pink-700 hover:underline flex items-center">
+        <Link href="/products" className="font-semibold text-pink-700 hover:underline">Menu</Link>
+        <Link href="/order" className="font-semibold text-pink-700 hover:underline">Order</Link>
+        <Link href="/cart" className="relative font-semibold text-pink-700 hover:underline flex items-center">
           <span>Cart</span>
           {cartCount > 0 && (
             <span className="ml-1 bg-pink-500 text-white rounded-full text-xs px-2 py-0.5 font-bold">
               {cartCount}
             </span>
           )}
-        </a>
-        <a href="/contact" className="font-semibold text-pink-700 hover:underline">Contact</a>
-        <a href="/admin" className="font-bold text-pink-800 underline">Admin</a>
+        </Link>
+        <Link href="/contact" className="font-semibold text-pink-700 hover:underline">Contact</Link>
+        <Link href="/admin" className="font-bold text-pink-800 underline">Admin</Link>
         {isLoaded && (
           !isSignedIn ? (
             <SignInButton mode="modal">

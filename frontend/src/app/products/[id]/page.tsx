@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    let cart: (Product & { quantity: number })[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    const cart: (Product & { quantity: number })[] = JSON.parse(localStorage.getItem("cart") || "[]");
     const idx = cart.findIndex((item) => item.id === product.id);
     if (idx > -1) {
       cart[idx].quantity += quantity;
