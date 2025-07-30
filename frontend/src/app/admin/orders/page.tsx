@@ -24,7 +24,7 @@ export default function OrdersPage() {
 
   // Protect route
   useEffect(() => {
-    fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/hello", { credentials: "include" })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/hello`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) router.replace("/admin-signin");
         else setLoading(false);
@@ -34,7 +34,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (!loading) {
-      fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/orders/", { credentials: "include" })
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/orders/`, { credentials: "include" })
         .then((res) => res.json())
         .then(data => {
           if (Array.isArray(data)) setOrders(data);
