@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./globals.css";
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   // If current path starts with /admin, hide the main Navbar and Footer

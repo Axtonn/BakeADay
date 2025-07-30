@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.25.5",
+    "@vercel/analytics": "^1.5.0",
     "iron-session": "^8.0.4",
     "next": "15.4.3",
     "react": "19.1.0",

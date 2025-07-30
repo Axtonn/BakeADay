@@ -16,7 +16,7 @@ export default function ProductsPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("${process.env.NEXT_PUBLIC_API_URL}/products")
       .then((res) => res.json())
       .then(setProducts);
   }, []);

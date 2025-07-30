@@ -4,6 +4,8 @@ FROM python:3.10-slim
 WORKDIR /app
 
 RUN pip install --upgrade pip
+RUN npm install @vercel/analytics
+
 
 # Install dependencies
 COPY requirements.txt ./
