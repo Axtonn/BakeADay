@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
       if (reviewImage) {
         const formData = new FormData();
         formData.append("file", reviewImage);
-        const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/reviews/upload", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/upload`, {
           method: "POST",
           body: formData,
         });

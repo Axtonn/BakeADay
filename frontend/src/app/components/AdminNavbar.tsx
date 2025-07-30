@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 export default function AdminNavbar() {
   const router = useRouter();
   const handleLogout = async () => {
-    await fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/logout", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/logout`, {
       method: "POST",
       credentials: "include",
     });
