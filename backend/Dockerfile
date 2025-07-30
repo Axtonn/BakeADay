@@ -2,6 +2,7 @@
 FROM python:3.10-slim
 
 WORKDIR /app
+ENV PYTHONPATH=/app
 
 RUN pip install --upgrade pip
 RUN npm install @vercel/analytics
@@ -12,7 +13,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app code
-COPY . .
+COPY ./app ./app
 COPY alembic ./alembic
 COPY alembic.ini ./
 
