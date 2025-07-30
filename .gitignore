@@ -23,8 +23,6 @@ venv/
 Pipfile.lock
 db.sqlite3
 instance/
-alembic.ini
-alembic/
 *.db
 *.sqlite3
 
