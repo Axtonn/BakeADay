@@ -19,9 +19,9 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://192.168.0.37:3000",
-        "http://163.47.70.74:3000",  # If needed
+        "http://localhost:3000", 
+        "https://bakeaday.vercel.app", 
+        "https://bakeaday-production.up.railway.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
