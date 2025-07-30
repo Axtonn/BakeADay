@@ -43,10 +43,10 @@ export default function ProductDetailPage() {
   });
 
   useEffect(() => {
-    fetch(`/api/products/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`)
       .then((res) => res.ok ? res.json() : null)
       .then(setProduct);
-    fetch(`/api/reviews/product/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/product/${id}`)
       .then((res) => res.ok ? res.json() : [])
       .then(setReviews);
   }, [id]);
@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
       if (reviewImage) {
         const formData = new FormData();
         formData.append("file", reviewImage);
-        const res = await fetch("/api/reviews/upload", {
+        const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/reviews/upload", {
           method: "POST",
           body: formData,
         });
@@ -88,7 +88,7 @@ export default function ProductDetailPage() {
           image_url = data.image_url;
         }
       }
-    const res = await fetch(`/api/reviews/product/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/product/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -100,7 +100,7 @@ export default function ProductDetailPage() {
       setReviewMsg("Review submitted!");
       setReview({ user_name: "", rating: 5, comment: "" });
       // Reload reviews
-      fetch(`/api/reviews/product/${id}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/product/${id}`)
         .then((res) => res.json())
         .then(setReviews);
     } else {

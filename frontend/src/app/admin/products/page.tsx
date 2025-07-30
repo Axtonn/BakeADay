@@ -31,7 +31,7 @@ export default function AdminProductsPage() {
 
   // Load products on mount
   useEffect(() => {
-    fetch("/api/admin/products/", { credentials: "include" })
+    fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/products/", { credentials: "include" })
       .then((res) => {
         if (!res.ok) throw new Error("Could not load products");
         return res.json();
@@ -68,7 +68,7 @@ export default function AdminProductsPage() {
     if (imageFile) {
       const data = new FormData();
       data.append("file", imageFile);
-      const uploadRes = await fetch("/api/admin/products/upload", {
+      const uploadRes = await fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/products/upload", {
         method: "POST",
         credentials: "include",
         body: data,
@@ -83,8 +83,8 @@ export default function AdminProductsPage() {
     }
     const method = editing ? "PUT" : "POST";
     const url = editing
-      ? `/api/admin/products/${editing.id}`
-      : "/api/admin/products/";
+      ? `${process.env.NEXT_PUBLIC_API_URL}/admin/products/${editing.id}`
+      : "${process.env.NEXT_PUBLIC_API_URL}/admin/products/";
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
@@ -100,7 +100,7 @@ export default function AdminProductsPage() {
       setMsg(editing ? "Product updated!" : "Product added!");
       setForm(emptyProduct);
       setEditing(null);
-      fetch("/api/admin/products/", { credentials: "include" })
+      fetch("${process.env.NEXT_PUBLIC_API_URL}/admin/products/", { credentials: "include" })
         .then((res) => res.json())
         .then(setProducts);
     } else {
@@ -119,7 +119,7 @@ export default function AdminProductsPage() {
   // Delete product
   async function handleDelete(id: number) {
     if (!confirm("Are you sure?")) return;
-    const res = await fetch(`/api/admin/products/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
