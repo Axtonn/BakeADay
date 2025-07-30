@@ -69,7 +69,6 @@ public/static/*
 
 # --- Optional: Remove secrets, configs, credentials ---
 secrets.*
-config.*
 credentials.*
 
 # --- Optional: Remove migration and backup files ---
