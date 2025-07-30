@@ -7,6 +7,7 @@ from app.api.admin.orders import router as orders_router
 from app.api.products import router as user_products_router
 from app.api.orders import router as user_orders_router
 from app.api.reviews import router as user_reviews_router
+from app.api.contact import router as user_contact_router
 from app.api.admin.analytics import router as analytics_router
 from app.core.config import settings
 from itsdangerous import URLSafeSerializer, BadSignature
@@ -17,7 +18,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://192.168.0.37:3000",
+        "http://163.47.70.74:3000",  # If needed
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,6 +41,7 @@ app.include_router(analytics_router, prefix="/api/admin/analytics", tags=["analy
 app.include_router(user_products_router, prefix="/api/products", tags=["products"])
 app.include_router(user_orders_router, prefix="/api/orders", tags=["orders"])
 app.include_router(user_reviews_router, prefix="/api/reviews", tags=["reviews"])
+app.include_router(user_contact_router, prefix="/api/contact", tags=["contact"])
 
 
 serializer = URLSafeSerializer(settings.SECRET_KEY, salt="admin-auth")

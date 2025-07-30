@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminSignIn() {
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ export default function AdminSignIn() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: pw }),
+        body: JSON.stringify({ email, password: pw }),
         credentials: "include", // This sends/receives cookies!
       });
 
@@ -40,11 +41,20 @@ export default function AdminSignIn() {
       <h2 className="text-3xl font-bold mb-8 text-pink-700">Admin Portal Sign In</h2>
       <form className="bg-white rounded shadow-xl p-8 flex flex-col gap-4 w-96" onSubmit={handleLogin}>
         <input
+          type="email"
+          placeholder="Admin Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="border px-4 py-2 rounded"
+          required
+        />
+        <input
           type="password"
-          placeholder="Enter Admin Password"
+          placeholder="Admin Password"
           value={pw}
           onChange={e => setPw(e.target.value)}
           className="border px-4 py-2 rounded"
+          required
         />
         {error && <div className="text-red-500 text-center">{error}</div>}
         <button

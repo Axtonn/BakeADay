@@ -6,3 +6,9 @@ asyncpg          # PostgreSQL driver (remove if using SQLite)
 passlib[bcrypt]
 python-multipart
 itsdangerous     # For signed cookie sessions
+python-jose
+aiofiles
+psycopg2-binary
+pydantic-settings>=2.0
+aiosmtplib
+email-validator

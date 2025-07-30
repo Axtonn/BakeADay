@@ -1,3 +1,6 @@
+"use client";
+import Link from "next/dist/client/link";
+
 export default function HomePage() {
   return (
     <section className="flex flex-col items-center justify-center py-16 px-4 bg-gradient-to-br from-pink-50 to-yellow-50 min-h-[80vh]">
@@ -16,11 +19,11 @@ export default function HomePage() {
           Bringing a little sweetness to your every day. <br />
           Order custom cakes, cookies, and bakes—crafted fresh, delivered fast!
         </p>
-        <a href="/order">
+        <Link href="/order">
           <button className="bg-pink-500 text-white px-6 py-3 rounded-full text-lg shadow hover:bg-pink-600 hover:scale-105 transition">
             Order Now
           </button>
-        </a>
+        </Link>
       </div>
       
 

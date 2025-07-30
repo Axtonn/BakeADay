@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/dist/client/link";
 import { useEffect, useState } from "react";
 
 type Product = {
@@ -90,8 +91,8 @@ export default function AdminProductsPage() {
       credentials: "include",
       body: JSON.stringify({
         ...form,
-        price: parseFloat(form.price as any),
-        in_stock: parseInt(form.in_stock as any),
+        price: parseFloat(String(form.price)),
+        in_stock: parseInt(String(form.in_stock)),
         image_url: imageUrl,
       }),
     });
@@ -133,7 +134,7 @@ export default function AdminProductsPage() {
 
   return (
     <section className="max-w-3xl mx-auto py-10">
-      <a href="/admin" className="text-pink-600 underline">&larr; Back to Dashboard</a>
+      <Link href="/admin" className="text-pink-600 underline">&larr; Back to Dashboard</Link>
       <h2 className="text-3xl font-bold text-pink-700 my-6">Products</h2>
       {error && <div className="text-red-500">{error}</div>}
       <form onSubmit={handleSubmit} className="bg-pink-50 rounded-xl shadow-md p-6 mb-10">

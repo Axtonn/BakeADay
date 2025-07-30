@@ -1,15 +1,21 @@
+import email
 from fastapi import APIRouter, Request, Response, status, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from app.core.config import settings
 import hmac
+from passlib.context import CryptContext
+from app.core.config import settings
 
 router = APIRouter()
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 JWT_SECRET = settings.SECRET_KEY
 JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 120
+SESSION_COOKIE = "bakeaday-admin-session"
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -26,28 +32,38 @@ def verify_token(token: str):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-SESSION_COOKIE = "bakeaday-admin-session"
-
 @router.post("/login")
 async def admin_login(request: Request, response: Response):
     data = await request.json()
+    email = data.get("email")
     password = data.get("password")
-    if password and hmac.compare_digest(password, settings.ADMIN_PASSWORD):
-        access_token = create_access_token({"auth": True})
-        response = JSONResponse(content={"ok": True})
-        response.set_cookie(
-            SESSION_COOKIE,
-            access_token,
-            httponly=True,
-            samesite="lax",
-            max_age=60 * 60 * 2,  # 2 hours
-            # secure=True, # Enable with HTTPS
+    if not email or not password:
+        return JSONResponse(
+            content={"ok": False, "error": "Missing credentials"},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
-        return response
-    return JSONResponse(
-        content={"ok": False, "error": "Invalid credentials"},
-        status_code=status.HTTP_401_UNAUTHORIZED,
+
+    # Load env credentials
+    admin_email = settings.ADMIN_EMAIL
+    admin_password = settings.ADMIN_PASSWORD_HASH
+
+    # Use constant-time comparison for security
+    if not (hmac.compare_digest(email, admin_email) and pwd_context.verify(password, admin_password)):        
+        return JSONResponse(
+            content={"ok": False, "error": "Invalid credentials"},
+            status_code=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    access_token = create_access_token({"auth": True, "sub": email})
+    response = JSONResponse(content={"ok": True})
+    response.set_cookie(
+        SESSION_COOKIE,
+        access_token,
+        httponly=True,
+        samesite="lax",
+        max_age=60 * 60 * 2,
     )
+    return response
 
 @router.post("/logout")
 async def admin_logout(response: Response):

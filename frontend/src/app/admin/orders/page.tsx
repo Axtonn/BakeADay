@@ -3,8 +3,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function OrdersPage() {
+  type Order = {
+    id: number;
+    customer_name: string;
+    customer_email?: string;
+    total: number;
+    created_at: string;
+    items: {
+      id: number;
+      order_id: number;
+      product_id: number;
+      quantity: number;
+      price: number;
+    }[];
+  };
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState("");
   const router = useRouter();
 
