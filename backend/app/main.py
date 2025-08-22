@@ -44,7 +44,7 @@ app.include_router(user_reviews_router, prefix="/api/reviews", tags=["reviews"])
 app.include_router(user_contact_router, prefix="/api/contact", tags=["contact"])
 
 
-serializer = URLSafeSerializer(settings.SECRET_KEY, salt="admin-auth")
+serializer = URLSafeSerializer(settings.SECRET_KEY.get_secret_value(), salt="admin-auth")
 SESSION_COOKIE = "bakeaday-admin-session"
 
 @app.middleware("http")
