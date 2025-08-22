@@ -6,5 +6,5 @@ const nextConfig = {
     "http://163.47.70.74:3000",
   ],
 };
-
+module.exports = { output: 'standalone' };
 module.exports = nextConfig;

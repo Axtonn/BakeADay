@@ -30,7 +30,9 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between items-center px-6 py-3 bg-pink-100 shadow">
       <Link href="/" className="text-3xl font-extrabold text-pink-700 flex items-center gap-2">
-        <span role="img" aria-label="cupcake">🧁</span> A Bake A Day
+        <span role="img" aria-label="cupcake">
+          <img src="/images/items/logo.png" className="w-20 h-20" />
+        </span>
       </Link>
       <div className="flex items-center gap-6">
         <Link href="/products" className="font-semibold text-pink-700 hover:underline">Menu</Link>
