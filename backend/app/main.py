@@ -14,6 +14,7 @@ from itsdangerous import URLSafeSerializer, BadSignature
 from jose import jwt, JWTError
 from fastapi.staticfiles import StaticFiles
 
+
 app = FastAPI()
 
 app.add_middleware(

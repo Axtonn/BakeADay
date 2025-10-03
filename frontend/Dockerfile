@@ -19,7 +19,7 @@ CMD [ "sh", "-c", "[ -d node_modules ] || npm ci && npm run dev" ]
 # ---- Build (prod artifact) ----
 FROM base AS builder
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm i
 COPY . .
 # Optional (recommended) for slimmer prod: set output: 'standalone' in next.config.js
 # module.exports = { output: 'standalone' }
