@@ -19,11 +19,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "https://bakeaday.vercel.app", 
-        "https://bakeaday-production.up.railway.app"
-    ],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,8 +41,8 @@ app.include_router(user_reviews_router, prefix="/api/reviews", tags=["reviews"])
 app.include_router(user_contact_router, prefix="/api/contact", tags=["contact"])
 
 
-serializer = URLSafeSerializer(settings.SECRET_KEY.get_secret_value(), salt="admin-auth")
 SESSION_COOKIE = "bakeaday-admin-session"
+ALLOWED_ORIGINS = set(settings.CORS_ORIGINS)
 
 @app.middleware("http")
 async def admin_protect_middleware(request: Request, call_next):
@@ -55,23 +51,36 @@ async def admin_protect_middleware(request: Request, call_next):
         return await call_next(request)
 
     # Protect /api/admin routes except /login and /logout
-    if request.url.path.startswith("/api/admin") and not request.url.path.endswith(("login", "logout")):
+    if request.url.path.startswith("/api/admin") and not any(
+        [
+            request.url.path.endswith("/login"),
+            request.url.path.endswith("/logout"),
+        ]
+    ):
         token = request.cookies.get(SESSION_COOKIE)
+        origin = request.headers.get("origin")
+
+        def _unauthorized(detail: str):
+            resp = JSONResponse({"detail": detail}, status_code=401)
+            if origin in ALLOWED_ORIGINS:
+                resp.headers["Access-Control-Allow-Origin"] = origin
+                resp.headers["Access-Control-Allow-Credentials"] = "true"
+            return resp
+
         if not token:
-            resp = JSONResponse({"detail": "Not authenticated"}, status_code=401)
-            # Add CORS headers!
-            resp.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
-            resp.headers["Access-Control-Allow-Credentials"] = "true"
-            return resp
+            return _unauthorized("Not authenticated")
+
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(
+                token,
+                settings.SECRET_KEY.get_secret_value(),
+                algorithms=["HS256"],
+            )
             if not payload.get("auth"):
-                raise Exception()
-        except Exception:
-            resp = JSONResponse({"detail": "Invalid session"}, status_code=401)
-            resp.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
-            resp.headers["Access-Control-Allow-Credentials"] = "true"
-            return resp
+                raise JWTError("Missing auth flag")
+        except JWTError:
+            return _unauthorized("Invalid session")
+
     response = await call_next(request)
     return response
 

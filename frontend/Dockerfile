@@ -14,7 +14,7 @@ FROM deps AS dev
 ENV CHOKIDAR_USEPOLLING=true
 EXPOSE 3000
 # On first run, if volume is empty, install deps; then start dev server
-CMD [ "sh", "-c", "[ -d node_modules ] || npm ci && npm run dev" ]
+CMD [ "sh", "-c", "[ -d ./node_modules ] || npm ci && npm run dev" ]
 
 # ---- Build (prod artifact) ----
 FROM base AS builder

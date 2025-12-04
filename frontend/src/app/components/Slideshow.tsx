@@ -5,9 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 const slides = [
-  { src: "/images/cake.jpg", caption: "Custom Cakes" },
-  { src: "/images/cookies.jpg", caption: "Fresh Cookies" },
-  { src: "/images/bread.jpg", caption: "Daily Bakes" },
+  {
+    src: "/images/items/slideshow/matcha_cake.jpeg",
+    caption: "Matcha cake",
+  },
+  {
+    src: "/images/items/slideshow/MBBC_01.jpg",
+    caption: "Basque Cheesecake Cupcakes",
+  },
+  {
+    src: "/images/items/slideshow/tart.jpeg",
+    caption: "Lemon Meringue Tarts",
+  },
 ];
 
 export default function Slideshow() {
@@ -38,7 +47,7 @@ export default function Slideshow() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+          <div className="absolute inset-0 bg-white/20 flex items-center justify-center">
             <h2 className="text-white text-4xl md:text-6xl font-bold drop-shadow-lg">
               {slides[index].caption}
             </h2>

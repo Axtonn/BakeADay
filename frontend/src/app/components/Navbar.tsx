@@ -28,16 +28,16 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="flex justify-between items-center px-6 py-3 bg-pink-100 shadow">
-      <Link href="/" className="text-3xl font-extrabold text-pink-700 flex items-center gap-2">
+    <nav className="flex justify-between items-center px-6 py-3 bg-gradient-to-br from-pink-50 to-yellow-50 shadow">
+      <Link href="/" className="text-3xl font-extrabold bg-gradient-to-br from-pink-50 to-yellow-50 flex items-center gap-2">
         <span role="img" aria-label="cupcake">
           <img src="/images/items/logo.png" className="w-20 h-20" />
         </span>
       </Link>
       <div className="flex items-center gap-6">
-        <Link href="/products" className="font-semibold text-pink-700 hover:underline">Menu</Link>
-        <Link href="/order" className="font-semibold text-pink-700 hover:underline">Order</Link>
-        <Link href="/cart" className="relative font-semibold text-pink-700 hover:underline flex items-center">
+        <Link href="/products" className="font-semibold hover:underline">Menu</Link>
+        <Link href="/order" className="font-semibold hover:underline">Order</Link>
+        <Link href="/cart" className="relative font-semibold hover:underline flex items-center">
           <span>Cart</span>
           {cartCount > 0 && (
             <span className="ml-1 bg-pink-500 text-white rounded-full text-xs px-2 py-0.5 font-bold">
@@ -45,8 +45,8 @@ export default function Navbar() {
             </span>
           )}
         </Link>
-        <Link href="/contact" className="font-semibold text-pink-700 hover:underline">Contact</Link>
-        <Link href="/admin" className="font-bold text-pink-800 underline">Admin</Link>
+        <Link href="/contact" className="font-semibold hover:underline">Contact</Link>
+        <Link href="/admin" className="font-bold underline">Admin</Link>
         {isLoaded && (
           !isSignedIn ? (
             <SignInButton mode="modal">
