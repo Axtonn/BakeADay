@@ -14,11 +14,11 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = Field(
-        default="postgresql+psycopg2://postgres:postgres@localhost:5432/postgres",
+        default="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres",
         validation_alias=AliasChoices(
             "DATABASE_URL",
             "SQLALCHEMY_DATABASE_URL",
-            "sqlalchemy.url",          # your current key with a dot
+            "sqlalchemy.url",
         ),
     )
 
@@ -28,11 +28,11 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ADMIN_EMAIL", "admin_email"),
     )
     # Either provide a raw password or a hash (hash preferred in prod)
-    ADMIN_PASSWORD: Optional[SecretStr] = Field(
+    ADMIN_PASSWORD: Optional[str] = Field(
         default=None,
         validation_alias=AliasChoices("ADMIN_PASSWORD", "admin_password"),
     )
-    ADMIN_PASSWORD_HASH: Optional[str] = Field(
+    ADMIN_PASSWORD_HASH: Optional[SecretStr] = Field(
         default=None,
         validation_alias=AliasChoices("ADMIN_PASSWORD_HASH", "admin_password_hash"),
     )
@@ -61,7 +61,7 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("SMTP_USER", "smtp_user"),
     )
     SMTP_PASSWORD: SecretStr = Field(
-        default=SecretStr("bpqg gezs fcct tcpe"),
+        default=SecretStr(""),  # require via env in prod
         validation_alias=AliasChoices("SMTP_PASSWORD", "smtp_password"),
     )
 
