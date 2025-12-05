@@ -1,80 +1,112 @@
-import email
-from fastapi import APIRouter, Request, Response, status, HTTPException, Depends
-from fastapi.responses import JSONResponse
-from jose import jwt, JWTError
+# app/api/admin/login.py
 from datetime import datetime, timedelta
-from app.core.config import settings
-import hmac
+import secrets
+
+from fastapi import APIRouter, HTTPException, Response, Depends
+from pydantic import BaseModel, EmailStr
+from jose import jwt
 from passlib.context import CryptContext
+
 from app.core.config import settings
 
 router = APIRouter()
 
+# same cookie name as used in app.main middleware
+SESSION_COOKIE_NAME = "bakeaday-admin-session"
+
+# password hashing context (for ADMIN_PASSWORD_HASH)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-JWT_SECRET = settings.SECRET_KEY
-JWT_ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
-SESSION_COOKIE = "bakeaday-admin-session"
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
+class AdminLoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
-def verify_token(token: str):
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        if payload.get("auth") is not True:
-            raise HTTPException(status_code=401, detail="Invalid credentials")
-        return payload
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
 
-@router.post("/login")
-async def admin_login(request: Request, response: Response):
-    data = await request.json()
-    email = data.get("email")
-    password = data.get("password")
-    if not email or not password:
-        return JSONResponse(
-            content={"ok": False, "error": "Missing credentials"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+class AdminLoginResponse(BaseModel):
+    message: str
 
-    # Load env credentials
-    admin_email = settings.ADMIN_EMAIL
-    admin_password = settings.ADMIN_PASSWORD_HASH
 
-    # Use constant-time comparison for security
-    if not (hmac.compare_digest(email, admin_email) and pwd_context.verify(password, admin_password)):        
-        return JSONResponse(
-            content={"ok": False, "error": "Invalid credentials"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+def _verify_admin_password(plain_password: str) -> bool:
+    """
+    Verify the admin password using either:
+    - ADMIN_PASSWORD (plaintext), or
+    - ADMIN_PASSWORD_HASH (bcrypt hash).
+    """
+    # Prefer hash if present
+    if settings.ADMIN_PASSWORD_HASH:
+        try:
+            return pwd_context.verify(plain_password, settings.ADMIN_PASSWORD_HASH)
+        except Exception:
+            # Misconfigured hash → treat as failure for safety
+            return False
 
-    access_token = create_access_token({"auth": True, "sub": email})
-    response = JSONResponse(content={"ok": True})
-    response.set_cookie(
-        SESSION_COOKIE,
-        access_token,
-        httponly=True,
-        samesite="lax",
-        max_age=60 * 60 * 2,
+    # Fallback to plaintext env var
+    if settings.ADMIN_PASSWORD and settings.ADMIN_PASSWORD.get_secret_value():
+        expected = settings.ADMIN_PASSWORD.get_secret_value()
+        return secrets.compare_digest(plain_password, expected)
+
+    # No password configured at all → hard fail (server misconfig)
+    raise HTTPException(status_code=500, detail="Admin password is not configured")
+
+
+@router.post(
+    "/login",
+    response_model=AdminLoginResponse,
+    summary="Admin Login",
+)
+async def admin_login(payload: AdminLoginRequest, response: Response):
+    """
+    Validate admin credentials against environment-configured admin email/password.
+    On success, sets an HTTP-only session cookie used by the admin middleware.
+    """
+
+    # 1) Check email
+    if payload.email.lower() != settings.ADMIN_EMAIL.lower():
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # 2) Check password (hash-aware)
+    if not _verify_admin_password(payload.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # 3) Create a short-lived JWT session token
+    now = datetime.utcnow()
+    expire = now + timedelta(hours=8)  # adjust as you like
+
+    token_data = {
+        "sub": settings.ADMIN_EMAIL,
+        "auth": True,
+        "iat": int(now.timestamp()),
+        "exp": int(expire.timestamp()),
+    }
+
+    token = jwt.encode(
+        token_data,
+        settings.SECRET_KEY.get_secret_value(),
+        algorithm="HS256",
     )
-    return response
 
-@router.post("/logout")
+    # 4) Set cookie so admin middleware in app.main sees it
+    response.set_cookie(
+        key=SESSION_COOKIE_NAME,
+        value=token,
+        httponly=True,
+        secure=True,          # you’re on HTTPS on Render
+        samesite="lax",
+        max_age=int((expire - now).total_seconds()),
+    )
+
+    return AdminLoginResponse(message="Logged in successfully")
+
+
+@router.post(
+    "/logout",
+    response_model=AdminLoginResponse,
+    summary="Admin Logout",
+)
 async def admin_logout(response: Response):
-    response = JSONResponse(content={"ok": True})
-    response.delete_cookie(SESSION_COOKIE)
-    return response
-
-@router.get("/hello")
-async def hello(request: Request):
-    token = request.cookies.get(SESSION_COOKIE)
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    verify_token(token)
-    return {"ok": True}
+    """
+    Clear the admin session cookie.
+    """
+    response.delete_cookie(SESSION_COOKIE_NAME)
+    return AdminLoginResponse(message="Logged out successfully")
