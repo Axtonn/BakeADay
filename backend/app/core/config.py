@@ -67,7 +67,7 @@ class Settings(BaseSettings):
 
     # CORS (good sane default for local Next.js)
     CORS_ORIGINS: list[str] = Field(
-        default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"],
+        default_factory=lambda: ["https://bakeaday.vercel.app", "http://localhost:3000", "http://127.0.0.1:3000"],
         validation_alias=AliasChoices("CORS_ORIGINS", "cors_origins"),
     )
 
