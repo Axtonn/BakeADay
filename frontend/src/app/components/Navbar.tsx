@@ -31,7 +31,7 @@ export default function Navbar() {
       <Link href="/" className="text-3xl font-extrabold bg-gradient-to-br from-pink-50 to-yellow-50 flex items-center gap-2">
         <span role="img" aria-label="cupcake">
           <Image
-            src="/images/logo.png"   // or your actual path
+            src="/images/items/logo.png"   // or your actual path
             alt="BakeADay logo"
             width={20}
             height={20}

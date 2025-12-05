@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres",
+        default="postgresql://bakeaday_user:WD8qQS69uaEMtnxB9sBsMC9ZUevFu4jI@dpg-d4p7066uk2gs73d6i4b0-a/bakeaday",
         validation_alias=AliasChoices(
             "DATABASE_URL",
             "SQLALCHEMY_DATABASE_URL",
