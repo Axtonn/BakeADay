@@ -27,7 +27,7 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState(emptyProduct);
   const [msg, setMsg] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imgPreview, setImgPreview] = useState<string | undefined>(undefined);
+  const [, setImgPreview] = useState<string | undefined>(undefined);
 
   // Load products on mount
   useEffect(() => {

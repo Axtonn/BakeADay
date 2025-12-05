@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 // Shared types (put in types.ts for reuse if you like)
 type Product = {
@@ -114,7 +115,13 @@ export default function ProductDetailPage() {
     <section className="py-10 px-4 min-h-[80vh] bg-yellow-50">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-8">
         {product.image_url ? (
-          <img src={product.image_url} alt={product.name} className="w-60 h-60 object-contain" />
+          <Image
+            src={product.image_url}
+            alt={product.name}
+            width={80}
+            height={80}
+            className="object-cover"
+          />
         ) : (
           <div className="w-60 h-60 flex items-center justify-center bg-gray-100 text-gray-400">
             No Image
