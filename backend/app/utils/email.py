@@ -1,16 +1,14 @@
-import os
+# app/utils/email.py
 from email.message import EmailMessage
 from aiosmtplib import send
 from pydantic import EmailStr
-from dotenv import load_dotenv
+from app.core.config import settings
 
-load_dotenv()
-
-SMTP_HOST = os.getenv("SMTP_HOST")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_USER = os.getenv("SMTP_USER")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-ADMIN_RECEIVER_EMAIL = os.getenv("ADMIN_RECEIVER_EMAIL")  # abakeadayy@gmail.com
+SMTP_HOST = settings.SMTP_HOST
+SMTP_PORT = settings.SMTP_PORT
+SMTP_USER = settings.SMTP_USER
+SMTP_PASSWORD = settings.SMTP_PASSWORD.get_secret_value()
+ADMIN_RECEIVER_EMAIL = settings.ADMIN_RECEIVER_EMAIL
 
 async def send_contact_email(sender_email: EmailStr, message: str):
     msg = EmailMessage()

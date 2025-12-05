@@ -27,9 +27,9 @@ export default function AdminSignIn() {
         router.push("/admin");
       } else {
         const data = await res.json();
-        setError(data?.error || "Invalid password");
+        setError(data?.error || "Invalid credentials");
       }
-    } catch (err) {
+    } catch {
       setError("Network/server error.");
     } finally {
       setLoading(false);

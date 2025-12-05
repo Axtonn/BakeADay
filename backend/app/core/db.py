@@ -1,10 +1,23 @@
+# app/core/db.py
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.core.config import settings
 
 DATABASE_URL = settings.DATABASE_URL
-engine = create_async_engine(DATABASE_URL, echo=True, future=True)
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+# Async engine using asyncpg driver (see Settings.DATABASE_URL)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=False,        # turn off noisy SQL logs in prod
+    future=True,
+)
+
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
+
 Base = declarative_base()
 
 async def get_db():
