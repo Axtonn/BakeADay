@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/dist/client/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type Product = {
   id: number;
@@ -50,13 +51,13 @@ export default function AdminProductsPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  // Handle file change
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    setImageFile(file ?? null);
-    if (file) setImgPreview(URL.createObjectURL(file));
-    else setImgPreview(undefined);
-  }
+
+//  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+//    const file = e.target.files?.[0];
+//    setImageFile(file ?? null);
+//    if (file) setImgPreview(URL.createObjectURL(file));
+//    else setImgPreview(undefined);
+//  }
 
   // Create or update product (with image upload)
   async function handleSubmit(e: React.FormEvent) {
@@ -237,11 +238,15 @@ export default function AdminProductsPage() {
           products.map((product) => (
             <li key={product.id} className="mb-6 border-b pb-4 flex flex-col md:flex-row items-center md:items-start gap-6">
               {product.image_url && (
-                <img
-                  src={product.image_url.startsWith("http") ? product.image_url : `${product.image_url}`}
+                <Image
+                  src={product.image_url}
                   alt={product.name}
-                  className="w-24 h-24 object-contain rounded bg-white border"
+                  width={24}
+                  height={24}
+                  className="object-cover"
+                  unoptimized
                 />
+
               )}
               <div className="flex-1">
                 <div className="font-bold text-lg text-pink-700">{product.name}</div>

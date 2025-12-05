@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
               </div>
               <div>
                 <input type="file" accept="image/*" onChange={handleReviewFileChange} />
-                {reviewImgPreview && <img src={reviewImgPreview} alt="Review Preview" className="w-24 h-24 mt-2" />}
+                {reviewImgPreview && <Image src={reviewImgPreview} alt="Review Preview" className="w-24 h-24 mt-2" />}
               </div>
               <div>
                 <textarea

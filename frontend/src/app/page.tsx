@@ -3,6 +3,7 @@
 import Link from "next/link";
 import HeroSlideshow from "./components/Slideshow";
 import { FadeInSection } from "./components/FadeInSection";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -48,8 +49,8 @@ export default function HomePage() {
             <p className="text-lg text-gray-700 mb-8">
               BakeADay was born to bring sweetness and joy into every home. We
               craft our cakes, cookies, and bakes with love and only the finest
-              ingredients. Whether you're celebrating a special occasion or just
-              want to treat yourself, we're here to make your day a little sweeter.
+              ingredients. Whether you are celebrating a special occasion or just
+              want to treat yourself, we are here to make your day a little sweeter.
             </p>
             <section className="py-16 px-6 bg-gradient-to-br from-yellow-50 to-pink-50">
               <div className="max-w-6xl mx-auto">
@@ -74,7 +75,7 @@ export default function HomePage() {
                           contemporary twist—always made from scratch.
                         </p>
                         <p className="text-lg text-gray-700">
-                          When she's not in the kitchen, Ava designs seasonal menus and
+                          When she is not in the kitchen, Ava designs seasonal menus and
                           teaches community baking classes.
                         </p>
                       </div>
@@ -83,7 +84,7 @@ export default function HomePage() {
                     <FadeInSection direction="right">
                       <div className="relative h-64 lg:h-80">
                         <div className="absolute inset-2 left-1/2 rounded-xl overflow-hidden shadow-lg">
-                          <img
+                          <Image
                             src="/images/founder/male.png"
                             alt="Axton Cahyadi"
                             className="w-full h-full object-cover"
@@ -100,7 +101,7 @@ export default function HomePage() {
                     <FadeInSection direction="left">
                       <div className="relative h-64 lg:h-80">
                         <div className="absolute inset-2 right-1/2 rounded-xl overflow-hidden shadow-lg">
-                          <img
+                          <Image
                             src="/images/founder/female.png"
                             alt="Ashleen Leandra"
                             className="w-full h-full object-cover"
@@ -135,7 +136,7 @@ export default function HomePage() {
           </FadeInSection>
 
           <FadeInSection direction="up">
-            <img
+            <Image
               src="/images/items/slideshow/bottom.jpg"
               alt="bake"
               className="rounded-xl shadow-lg"

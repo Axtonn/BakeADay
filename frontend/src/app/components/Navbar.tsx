@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 import Link from "next/dist/client/link";
+import Image from "next/image";
 
 type CartItem = {
   id: number;
@@ -14,7 +14,6 @@ type CartItem = {
 export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const { isLoaded, isSignedIn } = useUser();
-  const router = useRouter();
 
   // Update cart count when cart changes (localStorage)
   useEffect(() => {
@@ -31,7 +30,13 @@ export default function Navbar() {
     <nav className="flex justify-between items-center px-6 py-3 bg-gradient-to-br from-pink-50 to-yellow-50 shadow">
       <Link href="/" className="text-3xl font-extrabold bg-gradient-to-br from-pink-50 to-yellow-50 flex items-center gap-2">
         <span role="img" aria-label="cupcake">
-          <img src="/images/items/logo.png" className="w-20 h-20" />
+          <Image
+            src="/images/logo.png"   // or your actual path
+            alt="BakeADay logo"
+            width={20}
+            height={20}
+            className="h-10 w-auto"
+          />
         </span>
       </Link>
       <div className="flex items-center gap-6">
