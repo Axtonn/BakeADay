@@ -29,22 +29,13 @@ class AdminLoginResponse(BaseModel):
 
 def _verify_admin_password(plain_password: str) -> bool:
     """
-    Verify the admin password using either:
-    - ADMIN_PASSWORD (plaintext), or
-    - ADMIN_PASSWORD_HASH (bcrypt hash).
+    Verify the admin password using plaintext from ADMIN_PASSWORD only.
+    Hash-based auth is disabled per request.
     """
-    # Prefer hash if present
-    if settings.ADMIN_PASSWORD_HASH:
-        try:
-            hash_value = settings.ADMIN_PASSWORD_HASH.get_secret_value()
-            return pwd_context.verify(plain_password, hash_value)
-        except Exception:
-            # Misconfigured hash → treat as failure for safety
-            return False
-
-    # Fallback to plaintext env var
+    # Use plaintext env var only (strip any quotes/whitespace just in case)
     if settings.ADMIN_PASSWORD:
-        return secrets.compare_digest(plain_password, settings.ADMIN_PASSWORD)
+        raw_pw = settings.ADMIN_PASSWORD.strip().strip('"').strip("'")
+        return secrets.compare_digest(plain_password, raw_pw)
 
     # No password configured at all → hard fail (server misconfig)
     raise HTTPException(status_code=500, detail="Admin password is not configured")
@@ -63,11 +54,11 @@ async def admin_login(payload: AdminLoginRequest, response: Response):
 
     # 1) Check email
     if payload.email.lower() != settings.ADMIN_EMAIL.lower():
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Invalid email")
 
     # 2) Check password (hash-aware)
     if not _verify_admin_password(payload.password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Invalid pass")
 
     # 3) Create a short-lived JWT session token
     now = datetime.utcnow()

@@ -121,6 +121,7 @@ export default function ProductDetailPage() {
             width={80}
             height={80}
             className="object-cover"
+            unoptimized
           />
         ) : (
           <div className="w-60 h-60 flex items-center justify-center bg-gray-100 text-gray-400">
@@ -192,7 +193,16 @@ export default function ProductDetailPage() {
               </div>
               <div>
                 <input type="file" accept="image/*" onChange={handleReviewFileChange} />
-                {reviewImgPreview && <Image src={reviewImgPreview} alt="Review Preview" className="w-24 h-24 mt-2" />}
+                {reviewImgPreview && (
+                  <Image
+                    src={reviewImgPreview}
+                    alt="Review Preview"
+                    width={96}
+                    height={96}
+                    className="w-24 h-24 mt-2 object-cover"
+                    unoptimized
+                  />
+                )}
               </div>
               <div>
                 <textarea

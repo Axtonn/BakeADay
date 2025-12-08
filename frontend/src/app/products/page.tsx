@@ -28,7 +28,16 @@ export default function ProductsPage() {
       <div className="grid gap-8 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 max-w-5xl mx-auto">
         {products.map((item) => (
           <div key={item.id} className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
-            {item.image_url && <Image src={item.image_url} alt={item.name} className="h-32 mb-4" />}
+            {item.image_url && (
+              <Image
+                src={item.image_url}
+                alt={item.name}
+                width={200}
+                height={200}
+                className="h-32 w-auto mb-4 object-cover"
+                unoptimized
+              />
+            )}
             <div className="font-bold text-lg">{item.name}</div>
             <div className="mb-2 text-pink-700">${item.price.toFixed(2)}</div>
             <div className="text-sm mb-3">{item.description}</div>
