@@ -87,7 +87,7 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/male.png"
                             alt="Axton Cahyadi"
-                            width={640}
+                            width={500}
                             height={512}
                             className="w-full h-full object-cover"
                           />
@@ -106,7 +106,7 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/female.png"
                             alt="Ashleen Leandra"
-                            width={640}
+                            width={500}
                             height={512}
                             className="w-full h-full object-cover"
                           />
