@@ -10,7 +10,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     // Check admin session
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/hello`, { credentials: "include" })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/hello`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) router.replace("/admin-signin");
         else setLoading(false);
@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     if (!loading) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/analytics/`, { credentials: "include" })
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics/`, { credentials: "include" })
         .then((res) => {
           if (!res.ok) throw new Error("Could not load analytics");
           return res.json();

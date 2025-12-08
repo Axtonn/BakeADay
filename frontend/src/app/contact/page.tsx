@@ -11,7 +11,7 @@ export default function ContactPage() {
     e.preventDefault();
     setStatus("");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, message }),
