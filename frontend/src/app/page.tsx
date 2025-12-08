@@ -87,6 +87,8 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/male.png"
                             alt="Axton Cahyadi"
+                            width={640}
+                            height={512}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -104,6 +106,8 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/female.png"
                             alt="Ashleen Leandra"
+                            width={640}
+                            height={512}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -139,6 +143,8 @@ export default function HomePage() {
             <Image
               src="/images/items/slideshow/bottom.jpg"
               alt="bake"
+              width={1200}
+              height={800}
               className="rounded-xl shadow-lg"
             />
           </FadeInSection>
