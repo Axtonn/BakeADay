@@ -36,15 +36,15 @@ def _verify_admin_password(plain_password: str) -> bool:
     # Prefer hash if present
     if settings.ADMIN_PASSWORD_HASH:
         try:
-            return pwd_context.verify(plain_password, settings.ADMIN_PASSWORD_HASH)
+            hash_value = settings.ADMIN_PASSWORD_HASH.get_secret_value()
+            return pwd_context.verify(plain_password, hash_value)
         except Exception:
             # Misconfigured hash → treat as failure for safety
             return False
 
     # Fallback to plaintext env var
-    if settings.ADMIN_PASSWORD and settings.ADMIN_PASSWORD.get_secret_value():
-        expected = settings.ADMIN_PASSWORD.get_secret_value()
-        return secrets.compare_digest(plain_password, expected)
+    if settings.ADMIN_PASSWORD:
+        return secrets.compare_digest(plain_password, settings.ADMIN_PASSWORD)
 
     # No password configured at all → hard fail (server misconfig)
     raise HTTPException(status_code=500, detail="Admin password is not configured")
@@ -97,6 +97,18 @@ async def admin_login(payload: AdminLoginRequest, response: Response):
     )
 
     return AdminLoginResponse(message="Logged in successfully")
+
+
+@router.get(
+    "/hello",
+    summary="Admin Session Check",
+)
+async def admin_hello():
+    """
+    Simple endpoint to check if admin session is valid.
+    Protected by middleware, so if this returns 200, session is valid.
+    """
+    return {"message": "Authenticated", "status": "ok"}
 
 
 @router.post(

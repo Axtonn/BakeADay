@@ -28,7 +28,7 @@ export default function CartPage() {
   const handleCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!customer.name || !customer.email || cart.length === 0) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -1,7 +1,8 @@
 # app/core/config.py
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field, SecretStr, AliasChoices
+from pydantic import Field, SecretStr, AliasChoices, field_validator
 from typing import Optional
+import json
 
 class Settings(BaseSettings):
     # Pydantic Settings config
@@ -37,7 +38,7 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ADMIN_PASSWORD_HASH", "admin_password_hash"),
     )
 
-        # JWT/session secret
+    # JWT/session secret
     SECRET_KEY: SecretStr = Field(
         default=SecretStr("43db080680993b2c7d521c87002d85e8c24ef928635c74c60bb1e87b9cdc69c1"),
         validation_alias=AliasChoices("SECRET_KEY", "secret_key"),
@@ -66,9 +67,24 @@ class Settings(BaseSettings):
     )
 
     # CORS (good sane default for local Next.js)
+    # Can be set as JSON string in env var: ["https://bakeaday.vercel.app","http://localhost:3000"]
     CORS_ORIGINS: list[str] = Field(
-        default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"],
+        default_factory=lambda: ["https://bakeaday.vercel.app", "http://localhost:3000", "http://127.0.0.1:3000"],
         validation_alias=AliasChoices("CORS_ORIGINS", "cors_origins"),
     )
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS_ORIGINS from JSON string if it's a string, otherwise return as-is."""
+        if isinstance(v, str):
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return parsed
+            except json.JSONDecodeError:
+                # If it's not valid JSON, try splitting by comma
+                return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
 settings = Settings()

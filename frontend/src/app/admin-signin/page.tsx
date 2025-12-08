@@ -15,7 +15,7 @@ export default function AdminSignIn() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password: pw }),
@@ -27,7 +27,7 @@ export default function AdminSignIn() {
         router.push("/admin");
       } else {
         const data = await res.json();
-        setError(data?.error || "Invalid credentials");
+        setError(data?.detail || data?.error || "Invalid credentials");
       }
     } catch {
       setError("Network/server error.");

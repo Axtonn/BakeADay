@@ -9,7 +9,7 @@ export default function AdminDashboard() {
 
   // Check admin session
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/hello`, { credentials: "include" })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/hello`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) router.replace("/admin-signin");
         else setLoading(false);
