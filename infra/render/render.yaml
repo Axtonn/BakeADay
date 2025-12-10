@@ -18,8 +18,6 @@ services:
       # Secrets are not committed; set these in Render or via env groups.
       - key: DATABASE_URL
         sync: false
-      - key: sqlalchemy.url
-        sync: false
       - key: SECRET_KEY
         sync: false
       - key: ADMIN_EMAIL
