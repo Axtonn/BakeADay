@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
 from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
+
 from app.core.db import get_db
 from app.models.product import Product
 from app.schemas.product import Product as ProductSchema, ProductCreate
@@ -12,7 +14,10 @@ router = APIRouter()
 @router.get("/", response_model=List[ProductSchema])
 async def list_products(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
-        select(Product).options(selectinload(Product.reviews))
+        select(Product)
+        .options(selectinload(Product.reviews))
+        .where(Product.is_active == True)  # noqa: E712
+        .order_by(Product.is_featured.desc(), Product.created_at.desc())
     )
     products = result.scalars().all()
     return products
