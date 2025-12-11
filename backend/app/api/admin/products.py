@@ -1,11 +1,13 @@
-from fastapi import APIRouter, File, UploadFile, Depends, HTTPException
+import os
+import re
+import shutil
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from typing import List
-import shutil
-import os
 
 from app.core.db import get_db
 from app.models.product import Product
@@ -14,6 +16,29 @@ from app.schemas.product import Product as ProductSchema, ProductCreate
 UPLOAD_FOLDER = "static/images/products"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 router = APIRouter()
+
+
+def _slugify(name: str) -> str:
+    base = re.sub(r"[^a-zA-Z0-9]+", "-", name.strip().lower()).strip("-")
+    return base or "product"
+
+
+async def _ensure_unique_slug(
+    db: AsyncSession, candidate: str, exclude_id: Optional[int] = None
+) -> str:
+    slug = candidate
+    suffix = 1
+    while True:
+        query = select(Product.id).where(Product.slug == slug)
+        if exclude_id is not None:
+            query = query.where(Product.id != exclude_id)
+        result = await db.execute(query)
+        existing = result.scalar_one_or_none()
+        if existing is None:
+            return slug
+        suffix += 1
+        slug = f"{candidate}-{suffix}"
+
 
 @router.get("/", response_model=List[ProductSchema])
 async def list_products(db: AsyncSession = Depends(get_db)):
@@ -35,7 +60,11 @@ async def get_product(product_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.post("/", response_model=ProductSchema)
 async def create_product(product: ProductCreate, db: AsyncSession = Depends(get_db)):
-    db_product = Product(**product.dict())
+    incoming = product.dict(exclude_none=True)
+    base_slug = incoming.pop("slug", None) or _slugify(product.name)
+    slug = await _ensure_unique_slug(db, base_slug)
+
+    db_product = Product(**incoming, slug=slug)
     db.add(db_product)
     await db.commit()
     await db.refresh(db_product)
@@ -66,9 +95,15 @@ async def update_product(product_id: int, product: ProductCreate, db: AsyncSessi
     db_product = result.scalar_one_or_none()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
-    # Update fields
-    for key, value in product.dict().items():
+
+    incoming = product.dict(exclude_none=True)
+    base_slug = incoming.pop("slug", None) or _slugify(product.name or db_product.name)
+    slug = await _ensure_unique_slug(db, base_slug, exclude_id=product_id)
+
+    for key, value in incoming.items():
         setattr(db_product, key, value)
+    db_product.slug = slug
+
     await db.commit()
     await db.refresh(db_product)
     # Eager load relationships for serialization
