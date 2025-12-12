@@ -6,7 +6,7 @@
   --foreground: #41291a;
 }
 
-body, p, a, button {
+body, a, button {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
