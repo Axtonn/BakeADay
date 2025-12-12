@@ -66,6 +66,12 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("SMTP_PASSWORD", "smtp_password"),
     )
 
+    # Clerk webhook signing secret (reuse SECRET_KEY if not set)
+    CLERK_SIGNING_SECRET: Optional[SecretStr] = Field(
+        default=None,
+        validation_alias=AliasChoices("CLERK_SIGNING_SECRET", "clerk_signing_secret"),
+    )
+
     # CORS (good sane default for local Next.js)
     # Can be set as JSON string in env var: ["https://bakeaday.vercel.app","http://localhost:3000"]
     CORS_ORIGINS: list[str] = Field(
