@@ -11,6 +11,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.db import get_db
 from app.models.product import Product
+from app.models.order import OrderItem
 from app.schemas.product import Product as ProductSchema, ProductCreate
 
 UPLOAD_FOLDER = "static/images/products"
@@ -115,12 +116,15 @@ async def update_product(product_id: int, product: ProductCreate, db: AsyncSessi
 
 @router.delete("/{product_id}")
 async def delete_product(product_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(
-        select(Product).where(Product.id == product_id)
-    )
+    result = await db.execute(select(Product).where(Product.id == product_id))
     db_product = result.scalar_one_or_none()
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
+
+    # Delete dependent order items to avoid FK constraint errors
+    await db.execute(
+        OrderItem.__table__.delete().where(OrderItem.product_id == product_id)
+    )
     await db.delete(db_product)
     await db.commit()
     return {"ok": True}
