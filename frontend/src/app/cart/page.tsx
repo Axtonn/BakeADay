@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 type Product = {
   id: number;
@@ -18,10 +19,17 @@ export default function CartPage() {
   const [msg, setMsg] = useState("");
   const [customer, setCustomer] = useState({ name: "", email: "" });
   const router = useRouter();
+  const { isSignedIn, user } = useUser();
+
+  const cartKey = user?.id ? `cart_${user.id}` : "cart_guest";
 
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
-  }, []);
+    if (!isSignedIn) {
+      router.replace("/sign-in");
+      return;
+    }
+    setCart(JSON.parse(localStorage.getItem(cartKey) || "[]"));
+  }, [cartKey, isSignedIn, router]);
 
   const total = cart.reduce((t, p) => t + p.price * p.quantity, 0);
 
@@ -34,14 +42,18 @@ export default function CartPage() {
       body: JSON.stringify({
         customer_name: customer.name,
         customer_email: customer.email,
-        items: cart,
+        items: cart.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
         total,
       }),
     });
     if (res.ok) {
       setMsg("Order placed! You’ll get a confirmation email.");
       setCart([]);
-      localStorage.removeItem("cart");
+      localStorage.removeItem(cartKey);
       setTimeout(() => router.push("/"), 2000);
     } else {
       setMsg("Checkout failed.");

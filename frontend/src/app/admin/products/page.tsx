@@ -10,14 +10,26 @@ type Product = {
   description?: string;
   image_url?: string;
   in_stock: number;
+  slug: string;
+  is_active: boolean;
+  is_featured: boolean;
 };
 
-const emptyProduct: Omit<Product, "id"> = {
+const apiBase = process.env.NEXT_PUBLIC_API_URL;
+const resolveImage = (url?: string) => {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${apiBase}${url}`;
+};
+
+const emptyProduct: Omit<Product, "id" | "slug"> & { slug?: string } = {
   name: "",
   price: 0,
   description: "",
   image_url: "",
   in_stock: 0,
+  is_active: true,
+  is_featured: false,
 };
 
 export default function AdminProductsPage() {
@@ -48,7 +60,13 @@ export default function AdminProductsPage() {
 
   // Handle form changes
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
+    if (type === "checkbox") {
+      setForm({ ...form, [name]: checked });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   }
 
 
@@ -188,6 +206,16 @@ export default function AdminProductsPage() {
               onChange={handleChange}
             />
           </div>
+          <div>
+            <label className="block mb-1 font-lipstick text-pink-500 font-bold italic tracking-wide">Slug (optional)</label>
+            <input
+              name="slug"
+              placeholder="slug (auto-generated if left blank)"
+              className="cotton-candy"
+              value={form.slug ?? ""}
+              onChange={handleChange}
+            />
+          </div>
           <div className="md:col-span-2">
             <label className="block mb-1 font-lipstick text-pink-500 font-bold italic tracking-wide">Image File (optional)</label>
             <input
@@ -206,6 +234,24 @@ export default function AdminProductsPage() {
               placeholder="Description"
               className="cotton-candy"
               value={form.description}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-lipstick text-pink-500 font-bold italic tracking-wide">Active</label>
+            <input
+              type="checkbox"
+              name="is_active"
+              checked={form.is_active}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-lipstick text-pink-500 font-bold italic tracking-wide">Featured</label>
+            <input
+              type="checkbox"
+              name="is_featured"
+              checked={form.is_featured}
               onChange={handleChange}
             />
           </div>
@@ -239,7 +285,7 @@ export default function AdminProductsPage() {
             <li key={product.id} className="mb-6 border-b pb-4 flex flex-col md:flex-row items-center md:items-start gap-6">
               {product.image_url && (
                 <Image
-                  src={product.image_url}
+                  src={resolveImage(product.image_url) || ""}
                   alt={product.name}
                   width={24}
                   height={24}
@@ -253,6 +299,8 @@ export default function AdminProductsPage() {
                 <div className="text-pink-800 mb-1">${product.price.toFixed(2)}</div>
                 <div className="text-gray-600 mb-1">{product.description}</div>
                 <div className="text-sm text-gray-500">Stock: {product.in_stock}</div>
+                <div className="text-xs text-gray-500">Slug: {product.slug}</div>
+                <div className="text-xs text-gray-500">Active: {product.is_active ? "Yes" : "No"} • Featured: {product.is_featured ? "Yes" : "No"}</div>
               </div>
               <div className="flex flex-col gap-2">
                 <button

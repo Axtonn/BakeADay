@@ -1,0 +1,40 @@
+# Render service definition for BakeADay backend (production)
+services:
+  - type: web
+    name: BakeADay
+    plan: free
+    runtime: python
+    region: virginia
+    repo: https://github.com/Axtonn/BakeADay
+    branch: db_setup
+    rootDir: backend
+    autoDeploy: false
+    pullRequestPreviewsEnabled: false
+    healthCheckPath: /api/health
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
+    numInstances: 1
+    envVars:
+      # Secrets are not committed; set these in Render or via env groups.
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: ADMIN_RECEIVER_EMAIL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

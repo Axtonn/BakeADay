@@ -82,8 +82,8 @@ async def admin_login(payload: AdminLoginRequest, response: Response):
         key=SESSION_COOKIE_NAME,
         value=token,
         httponly=True,
-        secure=True,          # you’re on HTTPS on Render
-        samesite="lax",
+        secure=True,          
+        samesite="None",
         max_age=int((expire - now).total_seconds()),
     )
 

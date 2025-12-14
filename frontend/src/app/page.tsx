@@ -39,14 +39,14 @@ export default function HomePage() {
       </section>
 
       {/* Story Section with fade-in */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <FadeInSection direction="left">
             <h2 className="text-4xl font-playfair mb-6">Our Story</h2>
           </FadeInSection>
 
           <FadeInSection direction="right">
-            <p className="text-lg text-gray-700 mb-8">
+            <p className="text-lg text-gray-700 mb-8 bg-white">
               BakeADay was born to bring sweetness and joy into every home. We
               craft our cakes, cookies, and bakes with love and only the finest
               ingredients. Whether you are celebrating a special occasion or just
@@ -63,19 +63,19 @@ export default function HomePage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
                     <FadeInSection direction="left">
                       <div className="text-left px-4 lg:px-0">
-                        <h4 className="text-2xl font-playfair text-pink-800 mb-2">
-                          Ava Thompson
+                        <h4 className="text-2xl font-playfair mb-2">
+                          Axton Cahyadi
                         </h4>
                         <p className="text-sm uppercase tracking-wider text-yellow-700 font-semibold mb-4">
                           Co-founder & Head Pastry Chef
                         </p>
                         <p className="text-lg text-gray-700 mb-4">
-                          Ava brings a decade of artisan baking experience and a love for
-                          playful flavors. Her creations mix classic technique with a
+                          Axton brings a decade of artisan baking experience and a love for
+                          playful flavors. His creations mix classic technique with a
                           contemporary twist—always made from scratch.
                         </p>
                         <p className="text-lg text-gray-700">
-                          When she is not in the kitchen, Ava designs seasonal menus and
+                          When he is not in the kitchen, Axton designs seasonal menus and
                           teaches community baking classes.
                         </p>
                       </div>
@@ -87,7 +87,7 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/male.png"
                             alt="Axton Cahyadi"
-                            width={500}
+                            width={450}
                             height={512}
                             className="w-full h-full object-cover"
                           />
@@ -106,7 +106,7 @@ export default function HomePage() {
                           <Image
                             src="/images/founder/female.png"
                             alt="Ashleen Leandra"
-                            width={500}
+                            width={450}
                             height={512}
                             className="w-full h-full object-cover"
                           />
@@ -117,25 +117,25 @@ export default function HomePage() {
                     <FadeInSection direction="right">
                       <div className="text-left px-4 lg:px-0">
                         <h4 className="text-2xl font-playfair text-pink-800 mb-2">
-                          Marco Rivera
+                          Ashleen Leandra
                         </h4>
                         <p className="text-sm uppercase tracking-wider text-yellow-700 font-semibold mb-4">
                           Co-founder & Operations
                         </p>
                         <p className="text-lg text-gray-700 mb-4">
-                          Marco manages day-to-day operations and ensures every order
-                          arrives fresh. His focus on quality control and logistics keeps
+                          Ashleen manages day-to-day operations and ensures every order
+                          arrives fresh. Her focus on quality control and logistics keeps
                           the bakery running smoothly.
                         </p>
                         <p className="text-lg text-gray-700">
-                          Outside the bakery, Marco is an avid urban gardener and recipe
-                          collaborator with Ava.
-                        </p>
-                      </div>
-                    </FadeInSection>
+                          Outside the bakery, Ashleen is an avid urban gardener and recipe
+                              collaborator with Axton.
+                            </p>
+                        </div>
+                      </FadeInSection>
                   </div>
                 </div>
-              </div>
+            </div>
             </section>
           </FadeInSection>
 
