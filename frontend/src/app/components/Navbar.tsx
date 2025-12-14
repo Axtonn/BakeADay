@@ -45,7 +45,7 @@ export default function Navbar() {
       </Link>
       <div className="flex items-center gap-6">
         <Link href="/products" className="font-semibold hover:underline">Menu</Link>
-        <Link href="/order" className="font-semibold hover:underline">Order</Link>
+        <Link href="/order" className="font-semibold hover:underline">Custom Orders</Link>
         <Link href="/cart" className="relative font-semibold hover:underline flex items-center">
           <span>Cart</span>
           {cartCount > 0 && (

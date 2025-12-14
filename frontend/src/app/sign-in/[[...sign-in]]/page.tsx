@@ -20,8 +20,8 @@ export default function Page() {
         path="/sign-in"
         routing="path"
         signUpUrl={`/sign-up?redirect_url=${encodeURIComponent(redirect)}`}
-        afterSignInUrl={redirect}
-        afterSignUpUrl={redirect}
+        fallbackRedirectUrl={redirect}
+        forceRedirectUrl={redirect}
       />
     </div>
   );

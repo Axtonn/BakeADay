@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, pool
 
 from app.core.config import settings
 from app.core.db import Base  # your declarative base
-from app.models import product, order, user, review  # import so Alembic sees them
+from app.models import product, order, user, review, custom_order  # import so Alembic sees them
 
 
 # Alembic Config object, provides access to values in alembic.ini

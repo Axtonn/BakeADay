@@ -51,10 +51,21 @@ export default function CartPage() {
       }),
     });
     if (res.ok) {
-      setMsg("Order placed! You’ll get a confirmation email.");
+      setMsg("hooray! We've received your order. See you then!");
       setCart([]);
       localStorage.removeItem(cartKey);
-      setTimeout(() => router.push("/"), 2000);
+      // trigger a lightweight confetti animation
+      const confetti = document.createElement("div");
+      confetti.className = "confetti-container";
+      confetti.innerHTML = `
+        <div class="confetti left">🎉</div>
+        <div class="confetti right">🎉</div>
+      `;
+      document.body.appendChild(confetti);
+      setTimeout(() => {
+        confetti.remove();
+        router.push("/");
+      }, 1800);
     } else {
       setMsg("Checkout failed.");
     }

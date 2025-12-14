@@ -38,3 +38,26 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class CustomOrderCreate(BaseModel):
+    customer_name: str
+    customer_email: str
+    phone: Optional[str] = None
+    base_type: str
+    size: Optional[str] = None
+    flavor: Optional[str] = None
+    filling: Optional[str] = None
+    topping: Optional[str] = None
+    servings: Optional[str] = None
+    delivery_type: Optional[str] = None
+    requested_date: Optional[str] = None
+    message: Optional[str] = None
+
+
+class CustomOrder(CustomOrderCreate):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
