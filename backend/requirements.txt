@@ -13,3 +13,4 @@ pydantic-settings>=2.0
 aiosmtplib
 email-validator
 alembic
+svix
