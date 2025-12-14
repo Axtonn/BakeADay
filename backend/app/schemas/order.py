@@ -25,6 +25,11 @@ class OrderBase(BaseModel):
     customer_name: str
     customer_email: str
     total: float = Field(..., ge=0)
+    delivery_type: Optional[str] = None
+    delivery_address: Optional[str] = None
+    delivery_distance_km: Optional[float] = None
+    delivery_fee: Optional[float] = None
+    scheduled_date: Optional[str] = None
 
 
 class OrderCreate(OrderBase):
@@ -45,13 +50,16 @@ class CustomOrderCreate(BaseModel):
     customer_email: str
     phone: Optional[str] = None
     base_type: str
+    delivery_type: Optional[str] = None
+    delivery_address: Optional[str] = None
+    delivery_distance_km: Optional[float] = None
+    delivery_fee: Optional[float] = None
+    requested_date: Optional[str] = None
     size: Optional[str] = None
     flavor: Optional[str] = None
     filling: Optional[str] = None
     topping: Optional[str] = None
     servings: Optional[str] = None
-    delivery_type: Optional[str] = None
-    requested_date: Optional[str] = None
     message: Optional[str] = None
 
 

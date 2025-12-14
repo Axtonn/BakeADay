@@ -30,6 +30,7 @@ export default function OrderPage() {
   const [servings, setServings] = useState("");
   const [date, setDate] = useState("");
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">("pickup");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [status, setStatus] = useState("");
 
   const sizes = base === "cake" ? cakeOptions.sizes : cheesecakeOptions.sizes;
@@ -54,10 +55,24 @@ Custom Message: ${message}
 Customer: ${name} (${email}${phone ? ", " + phone : ""})
     `.trim();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/custom-orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, message: summary }),
+      body: JSON.stringify({
+        customer_name: name,
+        customer_email: email,
+        phone,
+        base_type: base,
+        size,
+        flavor,
+        filling,
+        topping,
+        servings,
+        delivery_type: deliveryType,
+        delivery_address: deliveryType === "delivery" ? deliveryAddress : null,
+        requested_date: date,
+        message,
+      }),
     });
     if (res.ok) {
       setStatus("Order submitted! We'll confirm details by email.");
@@ -72,6 +87,7 @@ Customer: ${name} (${email}${phone ? ", " + phone : ""})
       setServings("");
       setDate("");
       setDeliveryType("pickup");
+      setDeliveryAddress("");
     } else {
       setStatus("Failed to submit order. Please try again.");
     }
@@ -150,6 +166,18 @@ Customer: ${name} (${email}${phone ? ", " + phone : ""})
               <option value="delivery">Delivery</option>
             </select>
           </div>
+          {deliveryType === "delivery" && (
+            <div>
+              <label className="block mb-1 font-semibold text-pink-800">Delivery address</label>
+              <input
+                className="w-full border rounded px-3 py-2"
+                placeholder="Street, suburb, state, postcode"
+                value={deliveryAddress}
+                onChange={(e) => setDeliveryAddress(e.target.value)}
+                required
+              />
+            </div>
+          )}
           <div>
             <label className="block mb-1 font-semibold text-pink-800">Requested Date</label>
             <input type="date" className="w-full border rounded px-3 py-2" value={date} onChange={(e) => setDate(e.target.value)} />

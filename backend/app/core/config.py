@@ -72,6 +72,12 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("CLERK_SIGNING_SECRET", "clerk_signing_secret"),
     )
 
+    # Google Maps Distance Matrix API key
+    GOOGLE_MAPS_API_KEY: Optional[SecretStr] = Field(
+        default=None,
+        validation_alias=AliasChoices("GOOGLE_MAPS_API_KEY", "google_maps_api_key"),
+    )
+
     # CORS (good sane default for local Next.js)
     # Can be set as JSON string in env var: ["https://bakeaday.vercel.app","http://localhost:3000"]
     CORS_ORIGINS: list[str] = Field(

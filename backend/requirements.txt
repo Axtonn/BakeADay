@@ -14,3 +14,4 @@ aiosmtplib
 email-validator
 alembic
 svix
+httpx

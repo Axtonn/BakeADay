@@ -19,6 +19,8 @@ class CustomOrder(Base):
     topping = Column(String, nullable=True)
     servings = Column(String, nullable=True)
     delivery_type = Column(String, nullable=True)  # pickup or delivery
+    delivery_address = Column(String, nullable=True)
+    delivery_distance_km = Column(String, nullable=True)
     requested_date = Column(String, nullable=True)
     message = Column(String, nullable=True)
 
