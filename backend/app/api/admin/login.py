@@ -111,5 +111,10 @@ async def admin_logout(response: Response):
     """
     Clear the admin session cookie.
     """
-    response.delete_cookie(SESSION_COOKIE_NAME)
+    response.delete_cookie(
+        SESSION_COOKIE_NAME,
+        path="/",
+        secure=True,
+        samesite="none",
+    )
     return AdminLoginResponse(message="Logged out successfully")
