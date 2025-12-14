@@ -25,7 +25,7 @@ export default function CartPage() {
 
   useEffect(() => {
     if (!isSignedIn) {
-      router.replace("/sign-in");
+      router.replace("/sign-in?redirect_url=/cart");
       return;
     }
     setCart(JSON.parse(localStorage.getItem(cartKey) || "[]"));

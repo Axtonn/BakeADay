@@ -13,18 +13,22 @@ type CartItem = {
 
 export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
 
   // Update cart count when cart changes (localStorage)
   useEffect(() => {
     const updateCartCount = () => {
-      const cart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
+      const key = user?.id ? `cart_${user.id}` : "cart_guest";
+      const cart: CartItem[] = JSON.parse(localStorage.getItem(key) || "[]");
       setCartCount(cart.reduce((acc, item) => acc + item.quantity, 0));
+      if (!isSignedIn) {
+        localStorage.setItem("cart_guest", "[]");
+      }
     };
     updateCartCount();
     window.addEventListener("storage", updateCartCount);
     return () => window.removeEventListener("storage", updateCartCount);
-  }, []);
+  }, [isSignedIn, user?.id]);
 
   return (
     <nav className="flex justify-between items-center px-6 py-3 bg-gradient-to-br from-pink-50 to-yellow-50 shadow">
