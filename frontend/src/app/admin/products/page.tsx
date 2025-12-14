@@ -15,6 +15,13 @@ type Product = {
   is_featured: boolean;
 };
 
+const apiBase = process.env.NEXT_PUBLIC_API_URL;
+const resolveImage = (url?: string) => {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${apiBase}${url}`;
+};
+
 const emptyProduct: Omit<Product, "id" | "slug"> & { slug?: string } = {
   name: "",
   price: 0,
@@ -278,7 +285,7 @@ export default function AdminProductsPage() {
             <li key={product.id} className="mb-6 border-b pb-4 flex flex-col md:flex-row items-center md:items-start gap-6">
               {product.image_url && (
                 <Image
-                  src={product.image_url}
+                  src={resolveImage(product.image_url) || ""}
                   alt={product.name}
                   width={24}
                   height={24}

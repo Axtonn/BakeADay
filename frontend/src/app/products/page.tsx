@@ -12,6 +12,13 @@ type Product = {
   in_stock: number;
 };
 
+const apiBase = process.env.NEXT_PUBLIC_API_URL;
+const resolveImage = (url?: string) => {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${apiBase}${url}`;
+};
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
@@ -30,7 +37,7 @@ export default function ProductsPage() {
           <div key={item.id} className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
             {item.image_url && (
               <Image
-                src={item.image_url}
+                src={resolveImage(item.image_url) || ""}
                 alt={item.name}
                 width={200}
                 height={200}

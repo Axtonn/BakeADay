@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
 
 // Shared types (put in types.ts for reuse if you like)
 type Product = {
@@ -26,8 +27,16 @@ type ReviewCreate = {
   comment?: string;
 };
 
+const apiBase = process.env.NEXT_PUBLIC_API_URL;
+const resolveImage = (url?: string) => {
+  if (!url) return undefined;
+  if (url.startsWith("http")) return url;
+  return `${apiBase}${url}`;
+};
+
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const { isSignedIn, user } = useUser();
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [quantity, setQuantity] = useState(1);
@@ -55,14 +64,20 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    const cart: (Product & { quantity: number })[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    if (!isSignedIn) {
+      window.location.href = "/sign-in";
+      return;
+    }
+    const userId = user?.id || "unknown";
+    const cartKey = `cart_${userId}`;
+    const cart: (Product & { quantity: number })[] = JSON.parse(localStorage.getItem(cartKey) || "[]");
     const idx = cart.findIndex((item) => item.id === product.id);
     if (idx > -1) {
       cart[idx].quantity += quantity;
     } else {
       cart.push({ ...product, quantity });
     }
-    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem(cartKey, JSON.stringify(cart));
     setCartMsg("Added to cart!");
   };
 
@@ -116,7 +131,7 @@ export default function ProductDetailPage() {
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-8">
         {product.image_url ? (
           <Image
-            src={product.image_url}
+            src={resolveImage(product.image_url) || ""}
             alt={product.name}
             width={80}
             height={80}
