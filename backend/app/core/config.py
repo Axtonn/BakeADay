@@ -40,7 +40,7 @@ class Settings(BaseSettings):
 
     # JWT/session secret
     SECRET_KEY: SecretStr = Field(
-        default=SecretStr("43db080680993b2c7d521c87002d85e8c24ef928635c74c60bb1e87b9cdc69c1"),
+        default=SecretStr(""),
         validation_alias=AliasChoices("SECRET_KEY", "secret_key"),
     )
 
