@@ -10,6 +10,7 @@ from app.api.reviews import router as user_reviews_router
 from app.api.contact import router as user_contact_router
 from app.api.admin.analytics import router as analytics_router
 from app.api.webhooks.clerk import router as clerk_webhook_router
+from app.api.custom_orders import router as custom_orders_router
 from app.core.config import settings
 from itsdangerous import URLSafeSerializer, BadSignature
 from jose import jwt, JWTError
@@ -41,6 +42,7 @@ app.include_router(user_orders_router, prefix="/api/orders", tags=["orders"])
 app.include_router(user_reviews_router, prefix="/api/reviews", tags=["reviews"])
 app.include_router(user_contact_router, prefix="/api/contact", tags=["contact"])
 app.include_router(clerk_webhook_router, tags=["webhooks"])
+app.include_router(custom_orders_router, prefix="/api/custom-orders", tags=["custom-orders"])
 
 
 SESSION_COOKIE = "bakeaday-admin-session"

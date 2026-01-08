@@ -40,7 +40,7 @@ class Settings(BaseSettings):
 
     # JWT/session secret
     SECRET_KEY: SecretStr = Field(
-        default=SecretStr("43db080680993b2c7d521c87002d85e8c24ef928635c74c60bb1e87b9cdc69c1"),
+        default=SecretStr(""),
         validation_alias=AliasChoices("SECRET_KEY", "secret_key"),
     )
 
@@ -70,6 +70,12 @@ class Settings(BaseSettings):
     CLERK_SIGNING_SECRET: Optional[SecretStr] = Field(
         default=None,
         validation_alias=AliasChoices("CLERK_SIGNING_SECRET", "clerk_signing_secret"),
+    )
+
+    # Google Maps Distance Matrix API key
+    GOOGLE_MAPS_API_KEY: Optional[SecretStr] = Field(
+        default=None,
+        validation_alias=AliasChoices("GOOGLE_MAPS_API_KEY", "google_maps_api_key"),
     )
 
     # CORS (good sane default for local Next.js)

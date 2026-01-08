@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: bakeaday
-      POSTGRES_PASSWORD: bakeadaypw
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: bakeadaydb
     ports:
       - "5432:5432"

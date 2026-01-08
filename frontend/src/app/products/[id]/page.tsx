@@ -65,7 +65,7 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (!product) return;
     if (!isSignedIn) {
-      window.location.href = "/sign-in";
+      window.location.href = "/sign-in?redirect_url=/cart";
       return;
     }
     const userId = user?.id || "unknown";
